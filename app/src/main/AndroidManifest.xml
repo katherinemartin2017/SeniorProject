@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.russellmartin.mylistsapplication">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name="com.russellmartin.mylistsapplication.HomeActivity"
+            android:label="MyLists"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.russellmartin.mylistsapplication.TodoActivity"
+            android:parentActivityName="com.russellmartin.mylistsapplication.TodoListActivity"/>
+        <activity android:name="com.russellmartin.mylistsapplication.TodoListActivity"
+            android:label="List Content"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.russellmartin.mylistsapplication.CategoryActivity"
+            android:parentActivityName="com.russellmartin.mylistsapplication.TodoListActivity"></activity>
+
+        <provider
+            android:authorities="com.russellmartin.mylists.mylistsprovider"
+            android:name=".data.MyListsProvider"
+            android:exported="false"/>
+    </application>
+
+</manifest>
