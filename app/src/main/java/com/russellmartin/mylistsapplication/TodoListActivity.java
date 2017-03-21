@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.DialogFragment;
+import android.widget.Spinner;
 
 
 import com.russellmartin.mylistsapplication.data.DatabaseHelper;
@@ -30,7 +31,11 @@ import com.russellmartin.mylistsapplication.data.MyListsContract;
 import com.russellmartin.mylistsapplication.data.MyListsContract.*;
 import com.russellmartin.mylistsapplication.data.MyListsProvider;
 import com.russellmartin.mylistsapplication.data.TodosQueryHandler;
+import com.russellmartin.mylistsapplication.databinding.ActivityCategoryBinding;
 import com.russellmartin.mylistsapplication.databinding.ActivityTodoBinding;
+import com.russellmartin.mylistsapplication.databinding.TodoListItemBinding;
+import com.russellmartin.mylistsapplication.model.Category;
+import com.russellmartin.mylistsapplication.model.CategoryList;
 import com.russellmartin.mylistsapplication.model.Todo;
 
 import java.util.ArrayList;
@@ -43,13 +48,17 @@ import java.util.List;
 
 public class TodoListActivity extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>{
+    static final int ALL_CATEGORIES = -1;
     static final int ALL_RECORDS = -1;
     private static final int URL_LOADER = 0;
     Cursor cursor;
     TodosCursorAdapter adapter;
-    Todo todo;
+    CategoryList list = new CategoryList();
 
+    Spinner spinner;
+    CategoryListAdapter categoryAdapter;
 
+    
     private void updateTodo() {
         int id = 2;
         String[] args = {String.valueOf(id)};
@@ -141,8 +150,9 @@ public class TodoListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        spinner = (Spinner) findViewById(R.id.spinCategories);
         getLoaderManager().initLoader(URL_LOADER, null, this);
+        setCategories();
         final ListView lv = (ListView) findViewById(R.id.lvTodos);
         adapter = new TodosCursorAdapter(this, cursor, false);
         lv.setAdapter(adapter);
@@ -151,8 +161,8 @@ public class TodoListActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-      //Creates the editText for when an item is clicked
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        //Creates the editText for when an item is clicked
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 cursor = (Cursor) adapterView.getItemAtPosition(pos);
@@ -163,7 +173,7 @@ public class TodoListActivity extends AppCompatActivity
                 String todoCreated = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_CREATED));
                 String todoCategory = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_CATEGORY));
                 String todoList = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_LIST));
-                boolean boolDone = (todoDone==1);
+                boolean boolDone = (todoDone == 1);
                 Todo todo = new Todo(todoID, todoText, todoExpiredDate, todoCreated,
                         boolDone, todoCategory, todoList);
 
@@ -178,10 +188,15 @@ public class TodoListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                    }
-                });
+                Todo todo = new Todo(0, "", "", "", false, "0", "1");
+                Intent intent = new Intent(TodoListActivity.this, TodoActivity.class);
+                //pass the ID to the todoActivity
+                intent.putExtra("todo", todo);
+                intent.putExtra("categories", list);
+                startActivity(intent);
             }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -215,6 +230,33 @@ public class TodoListActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
 
     }
+    private void setCategories(){
+        final TodosQueryHandler categoriesHandler = new TodosQueryHandler(
+                this.getContentResolver()) {
+            @Override
+            protected void onQueryComplete(int token, Object cookie,
+                                           Cursor cursor) {
+                try {
+                    if ((cursor != null)) {
+                        int i = 0;
+                        list.ItemList.add(i, new Category(ALL_CATEGORIES, "All Categories"));
+                        i++;
+                        while (cursor.moveToNext()) {
+                            list.ItemList.add(i, new Category(
+                                    cursor.getInt(0),
+                                    cursor.getString(1)
+                            ));
+                            i++;
+                        }
+                    }
+                } finally {
+                    //cm = null;
+                }
+            }
+        };
+        categoriesHandler.startQuery(1, null, MyListsContract.CategoriesEntry.CONTENT_URI, null, null, null,
+                MyListsContract.CategoriesEntry.COLUMN_DESCRIPTION);
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -239,6 +281,10 @@ public class TodoListActivity extends AppCompatActivity
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
+        if(categoryAdapter == null){
+            categoryAdapter = new CategoryListAdapter(list.ItemList);
+            spinner.setAdapter(categoryAdapter);
+        }
 
     }
 

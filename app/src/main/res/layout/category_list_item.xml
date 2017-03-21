@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="category"
+            type="com.russellmartin.mylistsapplication.model.Category"/>
+    </data>
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
@@ -21,7 +28,9 @@
         android:layout_margin="4dp"
         android:layout_toEndOf="@+id/imageCatIcon"
         android:layout_toRightOf="@+id/imageCatIcon"
-        android:text="Dummy Text"
+        android:text="@{category.description}"
+        android:tag="@{category.catID}"
         android:textSize="18sp" />
 
 </RelativeLayout>
+    </layout>

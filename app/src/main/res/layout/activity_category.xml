@@ -1,22 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.russellmartin.mylistsapplication.CategoryActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable name="categories" type="com.russellmartin.mylistsapplication.model.CategoryList"/>
+        <variable name="category" type="com.russellmartin.mylistsapplication.model.Category"/>
+    </data>
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/lvCategories"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:entries="@array/categories_array"
+    <LinearLayout
+        android:orientation="vertical" android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        />
-</RelativeLayout>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/insert_new_category"
+            android:text="@={category.description}"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <Button
+                android:id="@+id/btnAdd"
+                android:layout_width="@dimen/btnSize"
+                android:layout_height="@dimen/btnSize"
+                android:text="@string/newCategory"
+                android:drawableTop="@drawable/tag_text_outline"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                style="@android:style/Widget.Button" />
+
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="@dimen/btnSize"
+                android:layout_height="@dimen/btnSize"
+                android:text="@string/save_category"
+                android:drawableTop="@android:drawable/ic_menu_save"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="center_horizontal"
+                style="@android:style/Widget.Button"
+                android:layout_centerHorizontal="true" />
+
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="@dimen/btnSize"
+                android:layout_height="@dimen/btnSize"
+                android:layout_gravity="right"
+                android:text="@string/delete_category"
+                style="@android:style/Widget.Button"
+                android:drawableTop="@android:drawable/ic_menu_delete"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/lvCategories"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            bind:items="@{categories.ItemList}"
+            />
+    </LinearLayout>
+</layout>

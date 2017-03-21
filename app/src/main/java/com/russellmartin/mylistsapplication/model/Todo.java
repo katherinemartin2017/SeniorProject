@@ -26,4 +26,7 @@ public class Todo implements Serializable {
         this.category.set(category);
         this.list.set(list);
     }
+    public Todo(){
+
+    }
 }
