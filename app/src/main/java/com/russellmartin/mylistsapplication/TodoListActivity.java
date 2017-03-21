@@ -5,6 +5,7 @@ import android.content.Loader;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,12 +20,18 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.DialogFragment;
 
 
 import com.russellmartin.mylistsapplication.data.DatabaseHelper;
 import com.russellmartin.mylistsapplication.data.MyListsContract;
 import com.russellmartin.mylistsapplication.data.MyListsContract.*;
 import com.russellmartin.mylistsapplication.data.MyListsProvider;
+import com.russellmartin.mylistsapplication.data.TodosQueryHandler;
+import com.russellmartin.mylistsapplication.databinding.ActivityTodoBinding;
+import com.russellmartin.mylistsapplication.model.Todo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +47,7 @@ public class TodoListActivity extends AppCompatActivity
     private static final int URL_LOADER = 0;
     Cursor cursor;
     TodosCursorAdapter adapter;
+    Todo todo;
 
 
     private void updateTodo() {
@@ -55,7 +63,15 @@ public class TodoListActivity extends AppCompatActivity
 
     private void deleteTodo(int id) {
 
-        getContentResolver().delete(TodosEntry.CONTENT_URI,CategoriesEntry._ID + "=" + id, null);
+        String[] args = {String.valueOf(id)};
+        if(id == ALL_RECORDS){
+            args = null;
+        }
+        TodosQueryHandler handler = new TodosQueryHandler(
+                this.getContentResolver());
+        handler.startDelete(1, null, TodosEntry.CONTENT_URI, TodosEntry._ID + " =?", args);
+
+        /*getContentResolver().delete(TodosEntry.CONTENT_URI,CategoriesEntry._ID + "=" + id, null);*/
     }
 
     private void createCategory() {
@@ -79,10 +95,16 @@ public class TodoListActivity extends AppCompatActivity
             ContentValues values = new ContentValues();
             values.put(MyListsContract.TodosEntry.COLUMN_TEXT, "Todo Item #" + i);
             values.put(MyListsContract.TodosEntry.COLUMN_CATEGORY, 1);
-            values.put(MyListsContract.TodosEntry.COLUMN_CREATED, "2017-03-05");
-            values.put(MyListsContract.TodosEntry.COLUMN_DONE, 0);
             values.put(MyListsContract.TodosEntry.COLUMN_LIST, 1);
-            Uri uri = getContentResolver().insert(TodosEntry.CONTENT_URI, values);
+            values.put(MyListsContract.TodosEntry.COLUMN_CREATED, "2017-03-05");
+            values.put(MyListsContract.TodosEntry.COLUMN_EXPIRED, "2018-07-20");
+            int done = (i%2 ==1) ? 1 : 0;
+            values.put(MyListsContract.TodosEntry.COLUMN_DONE, 1);
+            TodosQueryHandler handler = new TodosQueryHandler(
+                    this.getContentResolver()
+            );
+            handler.startInsert(1, null, TodosEntry.CONTENT_URI, values);
+
         }
 
     }
@@ -125,32 +147,41 @@ public class TodoListActivity extends AppCompatActivity
         adapter = new TodosCursorAdapter(this, cursor, false);
         lv.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Intent intent = getIntent();
         setSupportActionBar(toolbar);
 
-        // Adds the layout to the application including the list display and the toolbar
-       /*lv.setAdapter(new ArrayAdapter<String>(this, R.layout.todo_list_item,
-                R.id.tvNote,listname));*/
 
-/*        //Creates the editText for when an item is clicked
+      //Creates the editText for when an item is clicked
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                cursor = (Cursor) adapterView.getItemAtPosition(pos);
+                int todoID = cursor.getInt(cursor.getColumnIndex(TodosEntry._ID));
+                String todoText = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_TEXT));
+                String todoExpiredDate = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_EXPIRED));
+                int todoDone = cursor.getInt(cursor.getColumnIndex(TodosEntry.COLUMN_DONE));
+                String todoCreated = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_CREATED));
+                String todoCategory = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_CATEGORY));
+                String todoList = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_LIST));
+                boolean boolDone = (todoDone==1);
+                Todo todo = new Todo(todoID, todoText, todoExpiredDate, todoCreated,
+                        boolDone, todoCategory, todoList);
+
                 Intent intent = new Intent(TodoListActivity.this, TodoActivity.class);
-                String content= (String) lv.getItemAtPosition(pos);
-                intent.putExtra("Content", content);
+                intent.putExtra("todo", todo);
                 startActivity(intent);
             }
-        });*/
+        });
+
         // Controls when the User clicks the "Plus" fab in order to create new todos object
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+
+                    }
+                });
             }
-        });
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -192,6 +223,8 @@ public class TodoListActivity extends AppCompatActivity
                 TodosEntry.COLUMN_CREATED,
                 TodosEntry.COLUMN_EXPIRED,
                 TodosEntry.COLUMN_DONE,
+                TodosEntry.COLUMN_CATEGORY,
+                TodosEntry.COLUMN_LIST,
                 CategoriesEntry.TABLE_NAME + "." +
                         MyListsContract.CategoriesEntry.COLUMN_DESCRIPTION,
                 ListEntry.TABLE_NAME + "." +

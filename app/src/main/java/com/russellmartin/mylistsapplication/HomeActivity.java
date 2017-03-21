@@ -15,6 +15,8 @@ import android.widget.ListView;
 
 import com.russellmartin.mylistsapplication.data.DatabaseHelper;
 import com.russellmartin.mylistsapplication.data.MyListsContract;
+import com.russellmartin.mylistsapplication.model.ItemList;
+import com.russellmartin.mylistsapplication.model.Todo;
 
 // This Android Activity was created by modifying code from the PluralSite tutorial --> Building your First Android App with SQLite
 // This Activity controls the the listView of lists that can be opened in order to display todos list items
@@ -57,6 +59,16 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
                 Intent intent = new Intent(HomeActivity.this, TodoListActivity.class);
                 startActivity(intent);
+              /*  //Info for list
+                        cursor = (Cursor) adapterView.getItemAtPosition(pos);
+                        int listID = cursor.getInt(cursor.getColumnIndex(MyListsContract.ListEntry._ID));
+                        String listText = cursor.getString(cursor.getColumnIndex(MyListsContract.ListEntry.COLUMN_LIST_TEXT));
+                        ItemList list = new ItemList(listID, listText);
+
+                        Intent intent = new Intent(HomeActivity.this, TodoListActivity.class);
+                        intent.putExtra("list", list);
+                        startActivity(intent);*/
+
             }
         });
 

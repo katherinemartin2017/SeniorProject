@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="todo"
+            type="com.russellmartin.mylistsapplication.model.Todo"/>
+    </data>
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:padding="4dp">
 
-    <ImageView
-        android:id="@+id/imageDocIcon"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginTop="5dp"
-        android:tint="@color/colorIcons"
-        android:src="@drawable/box" />
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/checkBox"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:checked="@={todo.done}" />
 
     <TextView
         android:id="@+id/tvNote"
@@ -20,9 +26,11 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_margin="4dp"
-        android:layout_toEndOf="@+id/imageDocIcon"
-        android:layout_toRightOf="@+id/imageDocIcon"
-        android:text="Text"
-        android:textSize="20sp" />
+        android:layout_toEndOf="@+id/checkBox"
+        android:layout_toRightOf="@+id/checkBox"
+        android:textSize="20sp"
+        android:text="@={todo.text}"
+        android:tag="@{todo.id}"/>
 
 </RelativeLayout>
+</layout>
