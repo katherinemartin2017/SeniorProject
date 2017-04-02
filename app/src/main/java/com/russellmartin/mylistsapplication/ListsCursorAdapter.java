@@ -27,10 +27,10 @@ public class ListsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        TextView todoTextView = (TextView) view.findViewById(R.id.tvList);
+        TextView listTextView = (TextView) view.findViewById(R.id.tvList);
         int textColumn = cursor.getColumnIndex(MyListsContract.ListEntry.COLUMN_LIST_TEXT);
         String text = cursor.getString(textColumn);
-        todoTextView.setText(text);
+        listTextView.setText(text);
 
     }
 }

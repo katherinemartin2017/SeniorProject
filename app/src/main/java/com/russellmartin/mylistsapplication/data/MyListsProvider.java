@@ -127,6 +127,8 @@ public class MyListsProvider extends ContentProvider{
                 return insertRecord(uri, contentValues, TodosEntry.TABLE_NAME);
             case CATEGORIES:
                 return insertRecord(uri, contentValues, CategoriesEntry.TABLE_NAME);
+            case LIST:
+                return insertRecord(uri, contentValues, ListEntry.TABLE_NAME);
             default:
                 throw new IllegalArgumentException("Insert unknown URI: " + uri);
         }
@@ -162,6 +164,10 @@ public class MyListsProvider extends ContentProvider{
                 sel[0] = String.valueOf(id);
                 return deleteRecord(uri, selection, sel,
                         CategoriesEntry.TABLE_NAME);
+            case LIST:
+                return deleteRecord(uri, null, null, ListEntry.TABLE_NAME);
+            case LIST_ID:
+                return deleteRecord(uri, selection, selectionArgs, ListEntry.TABLE_NAME);
 
             default:
                 throw new IllegalArgumentException("Insert unknown URI: " + uri);
@@ -188,6 +194,8 @@ public class MyListsProvider extends ContentProvider{
                 return updateRecord(uri, values, selection, selectionArgs, TodosEntry.TABLE_NAME);
             case CATEGORIES:
                 return updateRecord(uri, values, selection, selectionArgs, CategoriesEntry.TABLE_NAME);
+            case LIST:
+                return updateRecord(uri, values, selection, selectionArgs, ListEntry.TABLE_NAME);
             default:
                 throw new IllegalArgumentException("Update unknown URI: " + uri);
         }

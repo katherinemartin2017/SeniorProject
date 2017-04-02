@@ -36,6 +36,7 @@ import com.russellmartin.mylistsapplication.databinding.ActivityTodoBinding;
 import com.russellmartin.mylistsapplication.databinding.TodoListItemBinding;
 import com.russellmartin.mylistsapplication.model.Category;
 import com.russellmartin.mylistsapplication.model.CategoryList;
+import com.russellmartin.mylistsapplication.model.ItemList;
 import com.russellmartin.mylistsapplication.model.Todo;
 
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ public class TodoListActivity extends AppCompatActivity
     Cursor cursor;
     TodosCursorAdapter adapter;
     CategoryList list = new CategoryList();
-
+    ItemList theList;
     Spinner spinner;
     CategoryListAdapter categoryAdapter;
 
@@ -158,6 +159,7 @@ public class TodoListActivity extends AppCompatActivity
         lv.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
+        theList = (ItemList)intent.getSerializableExtra("theList");
         setSupportActionBar(toolbar);
 
 

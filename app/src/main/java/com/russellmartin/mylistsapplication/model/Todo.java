@@ -14,7 +14,7 @@ public class Todo implements Serializable {
     public ObservableField<String> created = new ObservableField<>();
     public ObservableField<String> expired = new ObservableField<>();
     public ObservableField<String> category = new ObservableField<>();
-    public ObservableField<String> list = new ObservableField<>();
+    public ObservableField<String> lists = new ObservableField<>();
     public ObservableBoolean done = new ObservableBoolean();
 
     public Todo (int id, String text, String created, String expired, boolean done, String category, String list ){
@@ -24,7 +24,7 @@ public class Todo implements Serializable {
         this.expired.set(expired);
         this.done.set(done);
         this.category.set(category);
-        this.list.set(list);
+        this.lists.set(list);
     }
     public Todo(){
 

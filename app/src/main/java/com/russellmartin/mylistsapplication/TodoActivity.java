@@ -19,13 +19,15 @@ import com.russellmartin.mylistsapplication.data.TodosQueryHandler;
 import com.russellmartin.mylistsapplication.databinding.ActivityTodoBinding;
 import com.russellmartin.mylistsapplication.model.Category;
 import com.russellmartin.mylistsapplication.model.CategoryList;
+import com.russellmartin.mylistsapplication.model.ItemList;
 import com.russellmartin.mylistsapplication.model.Todo;
 
 public class TodoActivity extends AppCompatActivity {
     Todo todo;
     TodosQueryHandler handler;
     Spinner spinner;
-    CategoryList list;
+    CategoryList catList;;
+    ItemList lists;
     CategoryListAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,25 +38,25 @@ public class TodoActivity extends AppCompatActivity {
                 DataBindingUtil.setContentView(this, R.layout.activity_todo);
         Intent intent = getIntent();
         todo = (Todo)intent.getSerializableExtra("todo");
-        list = (CategoryList) intent.getSerializableExtra("categories");
-        adapter = new CategoryListAdapter(list.ItemList);
+        /*catList = (CategoryList) intent.getSerializableExtra("categories");adapter
+        adapter = new CategoryListAdapter(catList.ItemList);
         spinner=(Spinner) findViewById(R.id.spCategories);
-        spinner.setAdapter(adapter);
+        spinner.setAdapter(adapter);*/
         //set the bindings
         binding.setTodo(todo);
         //spinner, selected right
-        if (Integer.valueOf(todo.category.get()) == 0) {
+       /* if (Integer.valueOf(todo.category.get()) == 0) {
             position = 1;
         }
         else {
-            for (Category cat : list.ItemList) {
+            for (Category cat : catList.ItemList) {
                 if (Integer.valueOf(cat.catID.get()) == Integer.valueOf(todo.category.get())) {
                     break;
                 }
                 position++;
             }
             spinner.setSelection(position);
-        }
+        }*/
     }
 
     @Override
@@ -102,11 +104,13 @@ public class TodoActivity extends AppCompatActivity {
         TodosQueryHandler handler =  new TodosQueryHandler(getContentResolver());
         //save data(existing todo)
         //read the current category
-        Category cat = (Category)spinner.getSelectedItem();
-        int catId = cat.catID.get();
+       /* Category cat = (Category)spinner.getSelectedItem();
+        int catId = cat.catID.get();*/
+        int listId = lists.listID.get();
         ContentValues values = new ContentValues();
         values.put(MyListsContract.TodosEntry.COLUMN_TEXT, todo.text.get());
-        values.put(MyListsContract.TodosEntry.COLUMN_CATEGORY, catId);
+        values.put(MyListsContract.TodosEntry.COLUMN_CATEGORY, 1);
+        values.put(MyListsContract.TodosEntry.COLUMN_LIST, listId);
         values.put(MyListsContract.TodosEntry.COLUMN_DONE, todo.done.get());
         values.put(MyListsContract.TodosEntry.COLUMN_EXPIRED, todo.expired.get());
         if(todo != null && todo.id.get() != 0) {

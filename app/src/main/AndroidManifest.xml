@@ -22,7 +22,8 @@
             android:parentActivityName="com.russellmartin.mylistsapplication.TodoListActivity"/>
         <activity android:name="com.russellmartin.mylistsapplication.TodoListActivity"
             android:label="List Content"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName="com.russellmartin.mylistsapplication.HomeActivity"/>
         <activity android:name="com.russellmartin.mylistsapplication.CategoryActivity"
             android:parentActivityName="com.russellmartin.mylistsapplication.TodoListActivity"></activity>
 
