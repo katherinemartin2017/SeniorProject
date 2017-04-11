@@ -3,22 +3,32 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
-            name="lists"
+            name="list"
             type="com.russellmartin.mylistsapplication.model.ItemList"/>
     </data>
 <RelativeLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/imageListIcon"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:tint="@color/colorPrimary"
+        android:src="@drawable/plus" />
+
     <TextView
         android:id="@+id/tvList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="15dp"
-        android:paddingLeft="4dp"
-        android:textSize="25sp"
-        android:text="@{lists.list_text}"
-        android:tag="@{lists.listID}" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="4dp"
+        android:layout_toEndOf="@+id/imageListIcon"
+        android:layout_toRightOf="@+id/imageListIcon"
+        android:text="@{list.list_text}"
+        android:tag="@{list.listID}"
+        android:textSize="24sp" />
 
 </RelativeLayout>
     </layout>

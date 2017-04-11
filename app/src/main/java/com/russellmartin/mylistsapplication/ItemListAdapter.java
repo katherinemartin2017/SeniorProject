@@ -12,6 +12,7 @@ import android.widget.Spinner;
 
 import com.russellmartin.mylistsapplication.databinding.ActivityListBinding;
 
+import com.russellmartin.mylistsapplication.databinding.ListItemBinding;
 import com.russellmartin.mylistsapplication.model.ItemList;
 
 public class ItemListAdapter extends BaseAdapter {
@@ -42,13 +43,13 @@ public class ItemListAdapter extends BaseAdapter {
         if (inflater == null) {
             inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
-        ActivityListBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item, parent, false);
+        ListItemBinding binding = DataBindingUtil.inflate(inflater, R.layout.list_item, parent, false);
         binding.setList(list.get(position));
         return binding.getRoot();
     }
     //for the spinner
-    public int getPosition(Spinner spinner) {
-        return spinner.getSelectedItemPosition();
+    public int getPosition(Spinner s) {
+        return s.getSelectedItemPosition();
     }
 
     public int getPosition() {
