@@ -101,11 +101,12 @@ public class TodoListActivity extends AppCompatActivity
 
     private void createTestTodos() {
 
-        for (int i = 1; i < 20; i++) {
+        for (int i = 1; i < 5; i++) {
+
             ContentValues values = new ContentValues();
-            values.put(MyListsContract.TodosEntry.COLUMN_TEXT, "Todo Item #" + i);
-            values.put(MyListsContract.TodosEntry.COLUMN_CATEGORY, 1);
-            values.put(MyListsContract.TodosEntry.COLUMN_LIST, 1);
+            values.put(MyListsContract.TodosEntry.COLUMN_TEXT, "Category 2 - Todo #" + i+4);
+            values.put(MyListsContract.TodosEntry.COLUMN_CATEGORY, 2);
+            values.put(MyListsContract.TodosEntry.COLUMN_LIST, 2);
             values.put(MyListsContract.TodosEntry.COLUMN_CREATED, "2017-03-05");
             values.put(MyListsContract.TodosEntry.COLUMN_EXPIRED, "2018-07-20");
             int done = (i%2 ==1) ? 1 : 0;
@@ -198,6 +199,22 @@ public class TodoListActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+
+    spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+            if(position >= 0) {
+                getLoaderManager().restartLoader(URL_LOADER, null, TodoListActivity.this);
+            }
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+            // do nothing
+
+        }
+    });
+
     }
 
     @Override
@@ -241,10 +258,10 @@ public class TodoListActivity extends AppCompatActivity
                 try {
                     if ((cursor != null)) {
                         int i = 0;
-                        list.ItemList.add(i, new Category(ALL_CATEGORIES, "All Categories"));
+                        list.CatList.add(i, new Category(ALL_CATEGORIES, "All Categories"));
                         i++;
                         while (cursor.moveToNext()) {
-                            list.ItemList.add(i, new Category(
+                            list.CatList.add(i, new Category(
                                     cursor.getInt(0),
                                     cursor.getString(1)
                             ));
@@ -274,17 +291,29 @@ public class TodoListActivity extends AppCompatActivity
                 ListEntry.TABLE_NAME + "." +
                         MyListsContract.ListEntry.COLUMN_LIST_TEXT};
 
+        String selection;
+        String[] arguments = new String[1];
+
+        if(spinner.getSelectedItemId()<0){
+            selection = null;
+            arguments = null;
+        }
+        else {
+            selection = TodosEntry.COLUMN_CATEGORY + "=?";
+                    arguments[0] = String.valueOf(spinner.getSelectedItemId());
+        }
+
         return new CursorLoader(this,
                 TodosEntry.CONTENT_URI,
                 projection,
-                null, null, null);
+                selection, arguments, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
         if(categoryAdapter == null){
-            categoryAdapter = new CategoryListAdapter(list.ItemList);
+            categoryAdapter = new CategoryListAdapter(list.CatList);
             spinner.setAdapter(categoryAdapter);
         }
 

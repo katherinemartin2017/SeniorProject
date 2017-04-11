@@ -26,7 +26,8 @@
             android:parentActivityName="com.russellmartin.mylistsapplication.HomeActivity"/>
         <activity android:name="com.russellmartin.mylistsapplication.CategoryActivity"
             android:parentActivityName="com.russellmartin.mylistsapplication.TodoListActivity"></activity>
-
+        <activity android:name="com.russellmartin.mylistsapplication.ItemListActivity"
+            android:parentActivityName="com.russellmartin.mylistsapplication.HomeActivity"></activity>
         <provider
             android:authorities="com.russellmartin.mylists.mylistsprovider"
             android:name=".data.MyListsProvider"

@@ -6,7 +6,6 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,15 +15,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.russellmartin.mylistsapplication.data.DatabaseHelper;
 import com.russellmartin.mylistsapplication.data.ListsQueryHandler;
 import com.russellmartin.mylistsapplication.data.MyListsContract;
-import com.russellmartin.mylistsapplication.data.TodosQueryHandler;
 import com.russellmartin.mylistsapplication.model.ItemList;
-import com.russellmartin.mylistsapplication.model.Todo;
 
 // This Android Activity was created by modifying code from the PluralSite tutorial --> Building your First Android App with SQLite
 // This Activity controls the the listView of lists that can be opened in order to display todos list items
@@ -36,7 +31,7 @@ public class HomeActivity extends AppCompatActivity
     static final int ALL_RECORDS = -1;
     private static final int URL_LOADER = 0;
     Cursor cursor;
-    ListsCursorAdapter adapter;
+    ListAdapter adapter;
 
     private void deleteList(int id) {
 
@@ -72,7 +67,7 @@ public class HomeActivity extends AppCompatActivity
             Toolbar toolbar = (Toolbar)  findViewById(R.id.toolbar2);
             setSupportActionBar(toolbar);
             final ListView lv = (ListView) findViewById(R.id.lvLists);
-            adapter = new ListsCursorAdapter(this, cursor, false);
+            adapter = new ListAdapter(this, cursor, false);
             lv.setAdapter(adapter);
 
 
@@ -102,8 +97,8 @@ public class HomeActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent intent = new Intent(HomeActivity.this, ItemListActivity.class);
+                startActivity(intent);
             }
         });
     }

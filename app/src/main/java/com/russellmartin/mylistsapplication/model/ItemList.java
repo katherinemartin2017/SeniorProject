@@ -15,9 +15,8 @@ public class ItemList implements Serializable {
 
     }
 
-    public ItemList(int i, String d){
+    public ItemList(int i, String d) {
         listID.set(i);
         list_text.set(d);
     }
-
 }

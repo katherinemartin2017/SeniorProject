@@ -2,8 +2,8 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:bind="http://schemas.android.com/apk/res-auto">
     <data>
-        <variable name="categories" type="com.russellmartin.mylistsapplication.model.CategoryList"/>
-        <variable name="category" type="com.russellmartin.mylistsapplication.model.Category"/>
+        <variable name="list" type="com.russellmartin.mylistsapplication.model.ItemList"/>
+        <variable name="lists" type="com.russellmartin.mylistsapplication.model.ItemListList"/>
     </data>
 
     <LinearLayout
@@ -13,8 +13,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/insert_new_category"
-            android:text="@={category.description}"
+            android:hint="@string/insert_new_list"
+            android:text="@={list.list_text}"
             />
 
         <RelativeLayout
@@ -24,8 +24,8 @@
                 android:id="@+id/btnAdd"
                 android:layout_width="@dimen/btnSize"
                 android:layout_height="@dimen/btnSize"
-                android:text="@string/newCategory"
-                android:drawableTop="@drawable/tag_text_outline"
+                android:text="@string/newList"
+                android:drawableTop="@drawable/plus"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 style="@android:style/Widget.Button" />
@@ -34,7 +34,7 @@
                 android:id="@+id/btnSave"
                 android:layout_width="@dimen/btnSize"
                 android:layout_height="@dimen/btnSize"
-                android:text="@string/save_category"
+                android:text="@string/save_list"
                 android:drawableTop="@android:drawable/ic_menu_save"
                 android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
@@ -47,7 +47,7 @@
                 android:layout_width="@dimen/btnSize"
                 android:layout_height="@dimen/btnSize"
                 android:layout_gravity="right"
-                android:text="@string/delete_category"
+                android:text="@string/delete_list"
                 style="@android:style/Widget.Button"
                 android:drawableTop="@android:drawable/ic_menu_delete"
                 android:layout_alignParentTop="true"
@@ -61,7 +61,7 @@
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            bind:items="@{categories.CatList}"
+            bind:items="@{lists.Lists}"
             />
     </LinearLayout>
 </layout>

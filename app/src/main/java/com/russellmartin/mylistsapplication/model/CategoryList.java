@@ -10,13 +10,13 @@ import java.io.Serializable;
  */
 
 public class CategoryList implements Serializable {
-    public ObservableArrayList<Category> ItemList;
+    public ObservableArrayList<Category> CatList;
 
     public CategoryList() {
-        ItemList = new ObservableArrayList<>();
+        CatList = new ObservableArrayList<>();
     }
 
-    public CategoryList(ObservableArrayList<Category> itemList){
-        ItemList = itemList;
+    public CategoryList(ObservableArrayList<Category> catList){
+        CatList = catList;
     }
 }

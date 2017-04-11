@@ -10,15 +10,11 @@ import android.widget.TextView;
 
 import com.russellmartin.mylistsapplication.data.MyListsContract;
 
-/**
- * Created by Katherine on 3/14/17.
- */
 
-public class ListsCursorAdapter extends CursorAdapter {
-    public ListsCursorAdapter(Context context, Cursor c, boolean autoRequery) {
+public class ListAdapter extends CursorAdapter {
+    public ListAdapter(Context context, Cursor c, boolean autoRequery) {
         super(context, c, autoRequery);
     }
-
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
