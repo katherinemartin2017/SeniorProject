@@ -55,7 +55,8 @@ public class TodoListActivity extends AppCompatActivity
     Cursor cursor;
     TodosCursorAdapter adapter;
     CategoryList list = new CategoryList();
-    ItemList theList;
+    // ItemList theList;
+    int theListId;
     Spinner spinner;
     CategoryListAdapter categoryAdapter;
 
@@ -156,11 +157,12 @@ public class TodoListActivity extends AppCompatActivity
         getLoaderManager().initLoader(URL_LOADER, null, this);
         setCategories();
         final ListView lv = (ListView) findViewById(R.id.lvTodos);
-        adapter = new TodosCursorAdapter(this, cursor, false);
+        adapter = new TodosCursorAdapter(this, null, false);
         lv.setAdapter(adapter);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         Intent intent = getIntent();
-        theList = (ItemList)intent.getSerializableExtra("theList");
+        //theList = (ItemList)intent.getSerializableExtra("theList");
+        theListId = intent.getIntExtra("theListId", 0);
         setSupportActionBar(toolbar);
 
 
@@ -178,10 +180,11 @@ public class TodoListActivity extends AppCompatActivity
                 String todoList = cursor.getString(cursor.getColumnIndex(TodosEntry.COLUMN_LIST));
                 boolean boolDone = (todoDone == 1);
                 Todo todo = new Todo(todoID, todoText, todoExpiredDate, todoCreated,
-                        boolDone, todoCategory, todoList);
+                        boolDone, todoCategory, theListId);
 
                 Intent intent = new Intent(TodoListActivity.this, TodoActivity.class);
                 intent.putExtra("todo", todo);
+                intent.putExtra("categories", list);
                 startActivity(intent);
             }
         });
@@ -191,7 +194,7 @@ public class TodoListActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Todo todo = new Todo(0, "", "", "", false, "0", "1");
+                Todo todo = new Todo(0, "", "", "", false, "0", theListId);
                 Intent intent = new Intent(TodoListActivity.this, TodoActivity.class);
                 //pass the ID to the todoActivity
                 intent.putExtra("todo", todo);
@@ -291,22 +294,24 @@ public class TodoListActivity extends AppCompatActivity
                 ListEntry.TABLE_NAME + "." +
                         MyListsContract.ListEntry.COLUMN_LIST_TEXT};
 
-        String selection;
-        String[] arguments = new String[1];
-
-        if(spinner.getSelectedItemId()<0){
-            selection = null;
-            arguments = null;
+        String selection = TodosEntry.COLUMN_LIST + "=?";
+        if (spinner.getSelectedItemId() <= 0) {
+            String[] arguments = new String[1];
+            arguments[0] = String.valueOf(theListId);
+            return new CursorLoader(this,
+                    TodosEntry.CONTENT_URI,
+                    projection,
+                    selection, arguments, null);
+        } else {
+            String[] arguments = new String[2];
+            selection += " AND " + TodosEntry.COLUMN_CATEGORY + "=?";
+            arguments[0] = String.valueOf(theListId);
+            arguments[1] = String.valueOf(spinner.getSelectedItemId());
+            return new CursorLoader(this,
+                    TodosEntry.CONTENT_URI,
+                    projection,
+                    selection, arguments, null);
         }
-        else {
-            selection = TodosEntry.COLUMN_CATEGORY + "=?";
-                    arguments[0] = String.valueOf(spinner.getSelectedItemId());
-        }
-
-        return new CursorLoader(this,
-                TodosEntry.CONTENT_URI,
-                projection,
-                selection, arguments, null);
     }
 
     @Override
