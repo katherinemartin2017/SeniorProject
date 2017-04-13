@@ -24,9 +24,13 @@ public class TodosCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         TextView todoTextView = (TextView) view.findViewById(R.id.tvNote);
+        CheckBox checkBox = (CheckBox) view.findViewById(R.id.Checkbox);
+        boolean todoStatus = cursor.getColumnIndex(MyListsContract.TodosEntry.COLUM_DONE);
         int textColumn = cursor.getColumnIndex(MyListsContract.TodosEntry.COLUMN_TEXT);
         String text = cursor.getString(textColumn);
         todoTextView.setText(text);
+        checkBox.setChecked(todoStatus);
+        
 
     }
 }
